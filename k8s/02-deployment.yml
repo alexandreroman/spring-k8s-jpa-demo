@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: spring-k8s-jpa
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: app
+  template:
+    metadata:
+      labels:
+        role: app
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port:  "8080"
+    spec:
+      containers:
+        - name: app
+          image: alexandreroman/spring-k8s-jpa-demo:latest
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 1Gi
+          env:
+            # Uncomment, and dhange these settings according to your setup.
+            #- name: SPRING_DATASOURCE_URL
+            #  value: jdbc:postgresql://pgdb-postgresql/
+            #- name: SPRING_DATASOURCE_USERNAME
+            #  value: postgres
+            #- name: SPRING_DATASOURCE_PASSWORD
+            #  value: changeme
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /actuator/health/liveness
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 1
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /actuator/health/readiness
+            initialDelaySeconds: 10
+            failureThreshold: 6

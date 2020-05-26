@@ -1,0 +1,19 @@
+server:
+  port: ${PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  health:
+    probes:
+      enabled: true
+
+spring:
+  main:
+    lazy-initialization: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
