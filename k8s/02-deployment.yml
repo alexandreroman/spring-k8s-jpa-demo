@@ -26,13 +26,16 @@ spec:
             limits:
               memory: 1Gi
           env:
-            # Uncomment, and dhange these settings according to your setup.
+            # Uncomment, and change these settings according to your setup.
             #- name: SPRING_DATASOURCE_URL
             #  value: jdbc:postgresql://pgdb-postgresql/
             #- name: SPRING_DATASOURCE_USERNAME
             #  value: postgres
             #- name: SPRING_DATASOURCE_PASSWORD
-            #  value: changeme
+            #  valueFrom:
+            #    secretKeyRef:
+            #      name: pgdb-postgresql
+            #      key: postgresql-password
           ports:
             - name: http
               containerPort: 8080
