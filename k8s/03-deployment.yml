@@ -25,17 +25,17 @@ spec:
           resources:
             limits:
               memory: 1Gi
+          # Uncomment to inject datasource credentials
+          # (you may have to edit the secret name from the database deployment).
           env:
-            # Uncomment, and change these settings according to your setup.
-            #- name: SPRING_DATASOURCE_URL
-            #  value: jdbc:postgresql://pgdb-postgresql/
-            #- name: SPRING_DATASOURCE_USERNAME
-            #  value: postgres
-            #- name: SPRING_DATASOURCE_PASSWORD
-            #  valueFrom:
-            #    secretKeyRef:
-            #      name: pgdb-postgresql
-            #      key: postgresql-password
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgdb-postgresql
+                  key: postgresql-password
+          envFrom:
+            - configMapRef:
+                name: app
           ports:
             - name: http
               containerPort: 8080
