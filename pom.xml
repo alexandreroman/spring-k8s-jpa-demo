@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
+        <image.name>alexandreroman/spring-k8s-jpa-demo</image.name>
     </properties>
 
     <dependencies>
@@ -82,6 +83,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                    <image>
+                        <name>${image.name}</name>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>
