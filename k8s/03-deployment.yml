@@ -16,7 +16,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/actuator/prometheus"
-        prometheus.io/port:  "8080"
+        prometheus.io/port: "8080"
     spec:
       containers:
         - name: app
@@ -25,7 +25,7 @@ spec:
           resources:
             limits:
               memory: 1Gi
-          # Uncomment to inject datasource credentials
+          # Inject datasource credentials, if any
           # (you may have to edit the secret name from the database deployment).
           env:
             - name: SPRING_DATASOURCE_PASSWORD
@@ -33,9 +33,11 @@ spec:
                 secretKeyRef:
                   name: pgdb-postgresql
                   key: postgresql-password
+                  optional: true
           envFrom:
             - configMapRef:
                 name: app
+                optional: true
           ports:
             - name: http
               containerPort: 8080

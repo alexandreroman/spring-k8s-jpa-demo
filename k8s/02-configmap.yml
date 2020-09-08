@@ -5,6 +5,7 @@ metadata:
   name: app
   namespace: spring-k8s-jpa
 data:
+  # Uncomment the next lines to connect this app to a database.
   # You may have to edit these properties depending on the database name.
-  SPRING_DATASOURCE_URL: jdbc:postgresql://pgdb-postgresql/
-  SPRING_DATASOURCE_USERNAME: postgres
+  #SPRING_DATASOURCE_URL: jdbc:postgresql://pgdb-postgresql/
+  #SPRING_DATASOURCE_USERNAME: postgres
