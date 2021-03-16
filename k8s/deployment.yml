@@ -25,19 +25,10 @@ spec:
           resources:
             limits:
               memory: 1Gi
-          # Inject datasource credentials, if any
-          # (you may have to edit the secret name from the database deployment).
           env:
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pgdb-postgresql
-                  key: postgresql-password
-                  optional: true
-          envFrom:
-            - configMapRef:
-                name: app
-                optional: true
+            # Read ConfigMap and Secret mounted as volumes under /etc/config.
+            - name: SPRING_CONFIG_IMPORT
+              value: configtree:/etc/config/*/
           ports:
             - name: http
               containerPort: 8080
@@ -54,3 +45,18 @@ spec:
               path: /actuator/health/readiness
             initialDelaySeconds: 10
             failureThreshold: 6
+          volumeMounts:
+            - mountPath: /etc/config/app
+              name: app
+            # The database secret is mounted as a single file,
+            # using the name expected by Spring Data JPA (we're actually aliasing the secret key).
+            - mountPath: /etc/config/db/spring.datasource.password
+              name: db
+              subPath: postgresql-password
+      volumes:
+        - name: app
+          configMap:
+            name: app
+        - name: db
+          secret:
+            secretName: pgdb-postgresql
